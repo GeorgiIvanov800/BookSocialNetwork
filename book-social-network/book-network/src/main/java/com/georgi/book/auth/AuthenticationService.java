@@ -1,12 +1,15 @@
 package com.georgi.book.auth;
 
 import com.georgi.book.email.EmailService;
+import com.georgi.book.email.EmailTemplateName;
 import com.georgi.book.role.RoleRepository;
 import com.georgi.book.user.Token;
 import com.georgi.book.user.TokenRepository;
 import com.georgi.book.user.User;
 import com.georgi.book.user.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +27,10 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
 
-    public void register(RegistrationRequest request) {
+    @Value("${application.mailing.frontend.activation-url}")
+    private String activationUrl;
+
+    public void register(RegistrationRequest request) throws MessagingException {
 
         //Set default role for new users
         var userRole = roleRepository.findByName("USER")
@@ -48,10 +54,18 @@ public class AuthenticationService {
 
     }
 
-    private void sendValidationEmail(User user) {
+    private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);
         // send email
 
+        emailService.sendEmail(
+                user.getEmail(),
+                user.getUsername(),
+                EmailTemplateName.ACTIVATE_ACCOUNT,
+                activationUrl,
+                newToken,
+                "Account activation"
+        );
     }
 
     private String generateAndSaveActivationToken (User user){
