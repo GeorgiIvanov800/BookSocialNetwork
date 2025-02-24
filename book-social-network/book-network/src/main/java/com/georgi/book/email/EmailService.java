@@ -34,10 +34,10 @@ public class EmailService {
 
         String templateName;
 
-        if (emailTemplateName != null) {
+        if (emailTemplateName == null) {
             templateName = "confirm-email";
         } else {
-            templateName = emailTemplateName.name();
+            templateName = emailTemplateName.name().toLowerCase();
         }
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -57,7 +57,7 @@ public class EmailService {
         helper.setFrom("contact@georgi.com");
         helper.setTo(to);
         helper.setSubject(subject);
-
+        System.out.println();
         String template = templateEngine.process(templateName, context);
 
         helper.setText(template, true);
