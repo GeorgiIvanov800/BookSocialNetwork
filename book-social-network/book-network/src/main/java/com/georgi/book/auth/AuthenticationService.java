@@ -1,5 +1,6 @@
 package com.georgi.book.auth;
 
+import com.georgi.book.email.EmailService;
 import com.georgi.book.role.RoleRepository;
 import com.georgi.book.user.Token;
 import com.georgi.book.user.TokenRepository;
@@ -21,6 +22,8 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
+    private final EmailService emailService;
+
     public void register(RegistrationRequest request) {
 
         //Set default role for new users
@@ -38,7 +41,6 @@ public class AuthenticationService {
                 .enabled(false)
                 .roles(List.of(userRole))
                 .build();
-
         userRepository.save(user);
 
         //send validation email
@@ -49,19 +51,21 @@ public class AuthenticationService {
     private void sendValidationEmail(User user) {
         var newToken = generateAndSaveActivationToken(user);
         // send email
+
     }
 
     private String generateAndSaveActivationToken (User user){
         //generate the token
         String generatedToken = generateActivationCode(6);
+
         var token = Token.builder()
                 .token(generatedToken)
                 .createdAt(LocalDateTime.now())
                 .expiresAt(LocalDateTime.now().plusMinutes(30))
                 .user(user)
                 .build();
-
-        return null;
+        tokenRepository.save(token);
+        return generatedToken;
     }
 
     private String generateActivationCode(int length) {
