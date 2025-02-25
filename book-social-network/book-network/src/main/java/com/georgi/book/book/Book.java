@@ -5,10 +5,8 @@ import com.georgi.book.feedback.Feedback;
 import com.georgi.book.history.BookTransactionHistory;
 import com.georgi.book.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -18,6 +16,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class Book extends BaseEntity {
 
     private String title;
