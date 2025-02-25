@@ -1,4 +1,4 @@
-package com.georgi.book.book;
+package com.georgi.book.feedback;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,32 +14,21 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "book")
+@Table(name = "feedback")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book {
+public class Feedback {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String title;
+    private Double note;
 
-    private String authorName;
-
-    private String isbn;
-
-    private String publisher;
-
-    private String synopsis;
-
-    private String bookCover;
-
-    private boolean archived;
-
-    private boolean shareable;
+    private String comment;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)
