@@ -1,5 +1,6 @@
 package com.georgi.book.feedback;
 
+import com.georgi.book.book.Book;
 import com.georgi.book.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,4 +20,7 @@ public class Feedback extends BaseEntity {
 
     private String comment;
 
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 }
