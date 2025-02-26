@@ -1,6 +1,8 @@
 package com.georgi.book.book;
 
 import com.georgi.book.common.PageResponse;
+import com.georgi.book.history.BookTransactionHistory;
+import com.georgi.book.history.BookTransactionHistoryRepository;
 import com.georgi.book.user.User;
 import com.georgi.book.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,14 +22,16 @@ import static com.georgi.book.book.BookSpecification.*;
 @RequiredArgsConstructor
 public class BookService {
 
-    private final UserRepository userRepository;
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
+    private final BookTransactionHistoryRepository bookTransactionHistoryRepository;
 
     public Integer save(BookRequest request, Authentication connectedUser) {
 
-        User user = ( (User) connectedUser.getPrincipal());
+        User user = getUser(connectedUser);
+
         Book book = bookMapper.toBook(request);
+
         book.setOwner(user);
 
 
@@ -41,7 +45,7 @@ public class BookService {
     }
 
     public PageResponse<BookResponse> findAllBooks(int page, int size, Authentication connectedUser) {
-        User user = ( (User) connectedUser.getPrincipal());
+        User user = getUser(connectedUser);
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
 
         Page<Book> books = bookRepository.findAllDisplayableBooks(pageable, user.getId());
@@ -62,7 +66,7 @@ public class BookService {
     }
 
     public PageResponse<BookResponse> findAllBooksByOwner(int page, int size, Authentication connectedUser) {
-        User user = ( (User) connectedUser.getPrincipal());
+        User user = getUser(connectedUser);
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
 
@@ -81,5 +85,24 @@ public class BookService {
                 books.isFirst(),
                 books.isLast()
         );
+    }
+
+    public PageResponse<BookResponse> findAllBorrowedBooks(int page, int size, Authentication connectedUser) {
+        User user = getUser(connectedUser);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+
+        Page<BookTransactionHistory> allBorrowedBooks = bookTransactionHistoryRepository
+                .findAllBorrowedBooks(pageable, user.getId());
+
+        List<BorrowedBookResponse> bookResponse = allBorrowedBooks.stream()
+                .map(bookMapper::toBorrowedBookResponse)
+                .toList();
+
+        return null;
+    }
+
+
+    private User getUser(Authentication connectedUser) {
+        return ( (User) connectedUser.getPrincipal());
     }
 }
