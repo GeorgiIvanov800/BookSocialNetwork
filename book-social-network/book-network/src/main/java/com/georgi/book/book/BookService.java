@@ -1,5 +1,6 @@
 package com.georgi.book.book;
 
+import com.georgi.book.common.PageResponse;
 import com.georgi.book.user.User;
 import com.georgi.book.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +18,7 @@ public class BookService {
 
     public Integer save(BookRequest request, Authentication connectedUser) {
 
-        User user = ( (User) connectedUser.getPrincipal() );
+        User user = ( (User) connectedUser.getPrincipal());
         Book book = bookMapper.toBook(request);
         book.setOwner(user);
 
@@ -29,5 +30,10 @@ public class BookService {
         return bookRepository.findById(bookId)
                 .map(bookMapper::toBookResponse)
                 .orElseThrow( () -> new EntityNotFoundException( "No book with ID: "  + bookId));
+    }
+
+    public PageResponse<BookResponse> findAllBooks(int page, int size, Authentication connectedUser) {
+        User user = ( (User) connectedUser.getPrincipal());
+
     }
 }
