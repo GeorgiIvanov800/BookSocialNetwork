@@ -23,4 +23,8 @@ public class BookService {
 
         return bookRepository.save(book).getId();
     }
+
+    public BookResponse findById(Integer bookId) {
+
+    }
 }
