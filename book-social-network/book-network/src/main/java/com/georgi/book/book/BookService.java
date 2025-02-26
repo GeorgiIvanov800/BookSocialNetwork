@@ -2,6 +2,7 @@ package com.georgi.book.book;
 
 import com.georgi.book.user.User;
 import com.georgi.book.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class BookService {
     }
 
     public BookResponse findById(Integer bookId) {
-
+        return bookRepository.findById(bookId)
+                .map(bookMapper::toBookResponse)
+                .orElseThrow( () -> new EntityNotFoundException( "No book with ID: "  + bookId));
     }
 }
