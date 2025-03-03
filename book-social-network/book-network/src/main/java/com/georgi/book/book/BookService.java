@@ -166,4 +166,8 @@ public class BookService {
         bookRepository.save(book);
         return bookId;
     }
+
+    public Integer borrowBook(Integer bookId, Authentication connectedUser) {
+        return null;
+    }
 }
