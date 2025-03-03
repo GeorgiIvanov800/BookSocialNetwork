@@ -5,7 +5,6 @@ import com.georgi.book.exception.OperationNotPermittedException;
 import com.georgi.book.history.BookTransactionHistory;
 import com.georgi.book.history.BookTransactionHistoryRepository;
 import com.georgi.book.user.User;
-import com.georgi.book.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -168,6 +167,19 @@ public class BookService {
     }
 
     public Integer borrowBook(Integer bookId, Authentication connectedUser) {
-        return null;
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException( "No book with ID: "  + bookId));
+
+        if (book.isArchived() || !book.isShareable()) {
+            throw new OperationNotPermittedException("The requested book cannot be borrowed since it is archived or not shareable!");
+        }
+
+        User user = getUser(connectedUser);
+
+        if (Objects.equals(book.getOwner().getId(), user.getId())) {
+            throw new OperationNotPermittedException("Sorry you cannot borrowed your own book!");
+        }
+
+        final boolean isBorrowed = bookTransactionHistoryRepository.isAlreadyBorrowedByUser(bookId, user.getId());
     }
 }
