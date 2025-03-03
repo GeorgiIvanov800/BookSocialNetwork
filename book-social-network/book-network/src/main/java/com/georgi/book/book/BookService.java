@@ -181,5 +181,17 @@ public class BookService {
         }
 
         final boolean isBorrowed = bookTransactionHistoryRepository.isAlreadyBorrowedByUser(bookId, user.getId());
+
+        if (isBorrowed) {
+            throw new OperationNotPermittedException("Sorry you cannot borrow this book is already borrowed!");
+        }
+
+        BookTransactionHistory bookTransactionHistory = BookTransactionHistory.builder()
+                .user(user)
+                .book(book)
+                .returnApproved(false)
+                .returned(false)
+                .build();
+        return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
     }
 }
