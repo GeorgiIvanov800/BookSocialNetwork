@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface BookTransactionHistoryRepository extends JpaRepository<BookTransactionHistory, Integer> {
 
@@ -33,7 +35,7 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
     boolean isAlreadyBorrowedByUser(Integer bookId, Integer userId);
 
 
-    BookTransactionHistory findByBookIdAndUserIdAndReturnApprovedFalseAndReturnedFalse(Integer bookId, Integer userId);
+    Optional<BookTransactionHistory> findByBookIdAndUserIdAndReturnApprovedFalseAndReturnedFalse(Integer bookId, Integer userId);
 
 
     @Query("""
@@ -44,7 +46,7 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
             AND transaction.returnApproved = false
             AND transaction.returned = false
             """)
-    BookTransactionHistory findByBookIdAndUserId(Integer bookId, Integer userId);
+    Optional<BookTransactionHistory> findByBookIdAndUserId(Integer bookId, Integer userId);
 
 
 }

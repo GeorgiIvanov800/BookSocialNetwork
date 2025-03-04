@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.georgi.book.book.BookSpecification.*;
 
@@ -209,7 +210,12 @@ public class BookService {
             throw new OperationNotPermittedException("Sorry you cannot return your own book!");
         }
 
-        BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository.findByBookIdAndUserIdAndReturnApprovedFalseAndReturnedFalse(bookId, user.getId());
-        return null;
+        // TODO Double check if the Spring query works as expected if not use the self written query in the method => findByBookIdAndUserId
+        BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository
+                .findByBookIdAndUserIdAndReturnApprovedFalseAndReturnedFalse(bookId, user.getId())
+                .orElseThrow(() -> new OperationNotPermittedException(" You did not borrow this book"));
+        bookTransactionHistory.setReturned(true);
+
+        return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
     }
 }
