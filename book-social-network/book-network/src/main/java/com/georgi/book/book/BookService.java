@@ -2,6 +2,7 @@ package com.georgi.book.book;
 
 import com.georgi.book.common.PageResponse;
 import com.georgi.book.exception.OperationNotPermittedException;
+import com.georgi.book.file.FileStorageService;
 import com.georgi.book.history.BookTransactionHistory;
 import com.georgi.book.history.BookTransactionHistoryRepository;
 import com.georgi.book.user.User;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +28,7 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
     private final BookTransactionHistoryRepository bookTransactionHistoryRepository;
+    private final FileStorageService fileStorageService;
 
     public Integer save(BookRequest request, Authentication connectedUser) {
 
@@ -239,5 +242,16 @@ public class BookService {
         bookTransactionHistory.setReturnApproved(true);
         return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
 
+    }
+
+    public void uploadBookCoverPicture(MultipartFile file, Authentication connectedUser, Integer bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException( "No book with ID: "  + bookId));
+         User user = getUser(connectedUser);
+
+         var bookCover = fileStorageService.saveFile(file, bookId, user.getId());
+
+         book.setBookCover(bookCover);
+         bookRepository.save(book);
     }
 }
