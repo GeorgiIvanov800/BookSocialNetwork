@@ -249,7 +249,7 @@ public class BookService {
                 .orElseThrow(() -> new EntityNotFoundException( "No book with ID: "  + bookId));
          User user = getUser(connectedUser);
 
-         var bookCover = fileStorageService.saveFile(file, bookId, user.getId());
+         var bookCover = fileStorageService.saveFile(file, user.getId());
 
          book.setBookCover(bookCover);
          bookRepository.save(book);
