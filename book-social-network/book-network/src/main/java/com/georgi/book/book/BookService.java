@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.georgi.book.book.BookSpecification.*;
 
@@ -217,5 +216,28 @@ public class BookService {
         bookTransactionHistory.setReturned(true);
 
         return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
+    }
+
+    public Integer approveReturnBook(Integer bookId, Authentication connectedUser) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException( "No book with ID: "  + bookId));
+
+        User user = getUser(connectedUser);
+
+        if (book.isArchived() || !book.isShareable()) {
+            throw new OperationNotPermittedException("The requested book cannot be borrowed since it is archived or not shareable!");
+        }
+
+        if (Objects.equals(book.getOwner().getId(), user.getId())) {
+            throw new OperationNotPermittedException("Sorry you cannot return your own book!");
+        }
+
+        BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository
+                .findByBookIdAndUserIdAndReturnApprovedFalseAndReturnedFalse(bookId, user.getId())
+                .orElseThrow(() -> new OperationNotPermittedException("Sorry the book it's not returned"));
+
+        bookTransactionHistory.setReturnApproved(true);
+        return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
+
     }
 }
