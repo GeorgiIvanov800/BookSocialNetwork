@@ -209,7 +209,7 @@ public class BookService {
             throw new OperationNotPermittedException("Sorry you cannot return your own book!");
         }
 
-        BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository.findByBookIdAndUserId(bookId, user.getId());
+        BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository.findByBookIdAndUserIdAndReturnApprovedFalseAndReturnedFalse(bookId, user.getId());
         return null;
     }
 }
