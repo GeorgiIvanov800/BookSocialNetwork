@@ -2,6 +2,7 @@ package com.georgi.book.feedback;
 
 import com.georgi.book.book.Book;
 import com.georgi.book.book.BookRepository;
+import com.georgi.book.common.PageResponse;
 import com.georgi.book.exception.OperationNotPermittedException;
 import com.georgi.book.user.User;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,5 +32,9 @@ public class FeedbackService {
         Feedback feedback = feedbackMapper.toFeedback(request);
 
         return feedbackRepository.save(feedback).getId();
+    }
+
+    public PageResponse<FeedbackResponse> findAllFeedbackByBook(Integer bookId, int page, int size, Authentication connectedUser) {
+        return null;
     }
 }
