@@ -132,7 +132,7 @@ public class AuthenticationService {
             throw new RuntimeException("Token is expired new token has been send");
         }
 
-        var user = userRepository.findById(savedToken.getUser().getId())
+        var user = userRepository.findById(Long.valueOf(savedToken.getUser().getId()))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setEnabled(true);
