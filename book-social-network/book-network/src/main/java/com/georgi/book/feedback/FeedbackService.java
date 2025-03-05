@@ -30,6 +30,6 @@ public class FeedbackService {
 
         Feedback feedback = feedbackMapper.toFeedback(request);
 
-        return feedbackRepository.save(feedback);
+        return feedbackRepository.save(feedback).getId();
     }
 }
