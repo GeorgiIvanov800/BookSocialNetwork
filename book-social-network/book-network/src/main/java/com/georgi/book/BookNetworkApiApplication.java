@@ -26,6 +26,14 @@ public class BookNetworkApiApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return args -> {
+
+			if (roleRepository.findByName("USER").isEmpty()) {
+				roleRepository.save(
+						Role.builder().name("USER").build()
+				);
+
+			}
+
 			var userRole = roleRepository.findByName("USER")
 					//todo better exception handling
 					.orElseThrow(() -> new RuntimeException("User role not found"));
@@ -34,7 +42,7 @@ public class BookNetworkApiApplication {
 				userRepository.save(
 						User.builder()
 								.email("test@gmail.com")
-								.password(passwordEncoder.encode("test"))
+								.password(passwordEncoder.encode("test1234test"))
 								.enabled(true)
 								.accountLocked(false)
 								.firstName("John")
@@ -44,12 +52,7 @@ public class BookNetworkApiApplication {
 				);
 			}
 
-			if (roleRepository.findByName("USER").isEmpty()) {
-				roleRepository.save(
-						Role.builder().name("USER").build()
-				);
 
-			}
 		};
 	}
 }
