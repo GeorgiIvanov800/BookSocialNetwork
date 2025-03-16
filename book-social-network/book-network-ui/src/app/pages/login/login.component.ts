@@ -38,7 +38,13 @@ export class LoginComponent {
         this.router.navigate(['books']);
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
+        console.log(err.error);
+        if (err.error.validationErrors) {
+          this.errorMessage = err.error.validationErrors;
+        } else {
+          this.errorMessage.push(err.error.error);
+        }
       }
     })
   }
