@@ -54,7 +54,7 @@ public class BookService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
 
         Page<Book> books = bookRepository.findAllDisplayableBooks(pageable, user.getId());
-
+        System.out.println();
         List<BookResponse> bookResponses = books.stream()
                 .map(bookMapper::toBookResponse)
                 .toList();

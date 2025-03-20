@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {BookResponse} from '../../../../services/models/book-response';
 
 @Component({
   selector: 'app-book-card',
@@ -7,5 +8,15 @@ import { Component } from '@angular/core';
   styleUrl: './book-card.component.scss'
 })
 export class BookCardComponent {
+  private _book: BookResponse = {};
+
+  get book(): BookResponse {
+    return this._book;
+  }
+
+  @Input()
+  set book(value: BookResponse) {
+    this._book = value;
+  }
 
 }
