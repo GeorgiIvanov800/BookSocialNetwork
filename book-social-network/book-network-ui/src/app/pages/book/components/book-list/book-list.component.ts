@@ -40,22 +40,31 @@ export class BookListComponent implements OnInit {
   }
 
   goToFirstPage() {
-
+    this.page = 0;
+    this.findAllBooks();
   }
 
   GoToPreviousPage() {
-
+    this.page--;
+    this.findAllBooks();
   }
 
-  GoToPage(index: number) {
-
+  GoToPage(page: number) {
+    this.page = page;
+    this.findAllBooks();
   }
 
   goToNextPage() {
-
+    this.page++;
+    this.findAllBooks();
   }
 
   GoToLastPage() {
+    this.page = this.bookResponse.totalPages as number - 1;
+    this.findAllBooks();
+  }
 
+  get isLastPage(): boolean {
+      return this.page == this.bookResponse.totalPages as number - 1;
   }
 }
