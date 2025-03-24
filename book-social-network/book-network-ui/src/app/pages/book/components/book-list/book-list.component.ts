@@ -19,7 +19,7 @@ export class BookListComponent implements OnInit {
   bookResponse: PageResponseBookResponse = {};
 
   page: number = 0;
-  size: number = 5;
+  size: number = 2;
 
   constructor(private bookService: BookService, private router: Router) {
   }
@@ -37,5 +37,25 @@ export class BookListComponent implements OnInit {
         this.bookResponse = books;
       }
     });
+  }
+
+  goToFirstPage() {
+
+  }
+
+  GoToPreviousPage() {
+
+  }
+
+  GoToPage(index: number) {
+
+  }
+
+  goToNextPage() {
+
+  }
+
+  GoToLastPage() {
+
   }
 }
