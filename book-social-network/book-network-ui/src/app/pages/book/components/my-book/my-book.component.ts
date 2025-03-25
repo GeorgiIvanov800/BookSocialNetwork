@@ -27,11 +27,11 @@ export class MyBookComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.findAllBooks();
+    this.findAllBooksByOwner();
   }
 
-  private findAllBooks() {
-    this.bookService.findAllBooks({
+  private findAllBooksByOwner() {
+    this.bookService.findAllBooksByOwner({
       page: this.page,
       size: this.size
     }).subscribe({
@@ -43,31 +43,42 @@ export class MyBookComponent implements OnInit {
 
   goToFirstPage() {
     this.page = 0;
-    this.findAllBooks();
+    this.findAllBooksByOwner();
   }
 
   GoToPreviousPage() {
     this.page--;
-    this.findAllBooks();
+    this.findAllBooksByOwner();
   }
 
   GoToPage(page: number) {
     this.page = page;
-    this.findAllBooks();
+    this.findAllBooksByOwner();
   }
 
   goToNextPage() {
     this.page++;
-    this.findAllBooks();
+    this.findAllBooksByOwner();
   }
 
   GoToLastPage() {
     this.page = this.bookResponse.totalPages as number - 1;
-    this.findAllBooks();
+    this.findAllBooksByOwner();
   }
 
   get isLastPage(): boolean {
     return this.page == this.bookResponse.totalPages as number - 1;
   }
 
+  archiveBook(book: BookResponse) {
+
+  }
+
+  shareBook(book: BookResponse) {
+
+  }
+
+  editBook(book: BookResponse) {
+
+  }
 }

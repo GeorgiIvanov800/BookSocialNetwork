@@ -10,6 +10,9 @@
     [book]="book"
     [manage]="true"
     *ngFor="let book of bookResponse.content"
+    (archive)="archiveBook($event)"
+    (share)="shareBook($event)"
+    (edit)="editBook($event)"
   ></app-book-card>
 </div>
 <hr>
