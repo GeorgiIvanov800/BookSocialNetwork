@@ -50,16 +50,18 @@ public class FileStorageService {
         final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
         // ./upload/users/1/245135.jpg
         String targetFilePath = fileUploadSubPath + separator + System.currentTimeMillis() + "." + fileExtension;
-
-        Path targetPath = Paths.get(targetFilePath);
+        String targetFileName = System.currentTimeMillis() + "." + fileExtension;
+        System.out.println();
+//        Path targetPath = Paths.get(targetFilePath);
+        Path targetPath = Paths.get(finalUploadPath, targetFileName);
         try {
             Files.write(targetPath, sourceFile.getBytes());
-            log.info("Successfully uploaded file {}", targetFilePath);
+            log.info("Successfully uploaded file {}", targetPath.toAbsolutePath());
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
 
-        return targetFilePath;
+        return finalUploadPath + separator + targetFileName; // Return correct path
     }
 
     private String getFileExtension(String fileName) {

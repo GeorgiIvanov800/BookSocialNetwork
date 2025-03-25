@@ -12,11 +12,11 @@ export const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'activate-account', component: ActivateAccountComponent},
   {
-    path: '', component: BookMainComponent, children: [
-      {path: 'books', component: BookListComponent},
+    path: 'books', component: BookMainComponent, children: [
+      {path: '', component: BookListComponent},
       {path: 'my-books', component: MyBookComponent},
       {path:'manage', component: ManageBookComponent},
-      {path:'manage/:bookId', component: ManageBookComponent},
+      {path:'manage/:id', component: ManageBookComponent},
     ]
   },
 
