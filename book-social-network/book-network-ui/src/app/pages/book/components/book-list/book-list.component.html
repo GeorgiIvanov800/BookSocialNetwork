@@ -1,9 +1,18 @@
 <h3>Books list</h3>
+<div
+*ngIf="message"
+class="alert"
+[class.alert-danger]="level === 'error'"
+[class.alert-success]="level === 'success'"
+>
+
+</div>
 <hr>
 <div class="d-flex justify-content-start gap-2 flex-wrap">
   <app-book-card
     [book]="book"
     *ngFor="let book of bookResponse.content"
+    (borrow)="borrowBook($event)"
   ></app-book-card>
 </div>
 
@@ -13,7 +22,7 @@
       <li class="page-item">
         <a (click)="goToFirstPage()"
            class="page-link"
-           href="javascript:void(0)"
+           role="button"
            aria-label="Go to First Page"
            [class.disabled]="page == 0"
         >
@@ -23,7 +32,7 @@
       <li class="page-item">
         <a (click)="GoToPreviousPage()"
            class="page-link"
-           href="javascript:void(0)"
+           role="button"
            aria-label="previous"
            [class.disabled]="page == 0">
           <i class="fa-solid fa-angle-left"></i>
@@ -32,7 +41,7 @@
       <li class="page-item" *ngFor="let _ of [].constructor(this.bookResponse.totalPages); let pageIndex = index">
         <a (click)="GoToPage(pageIndex)"
            class="page-link"
-           href="javascript:void(0)"
+           role="button"
            aria-label="previous"
            [class.active]="page == pageIndex"
         >
@@ -43,7 +52,7 @@
       <li class="page-item">
         <a (click)="goToNextPage()"
            class="page-link"
-           href="javascript:void(0)"
+           role="button"
            aria-label="Next"
            [class.disabled]="isLastPage">
 
@@ -53,7 +62,7 @@
       <li class="page-item">
         <a (click)="GoToLastPage()"
            class="page-link"
-           href="javascript:void(0)"
+           role="button"
            aria-label="Last Page"
            [class.disabled]="isLastPage">
           <i class="fa-solid fa-angle-double-right"></i>
