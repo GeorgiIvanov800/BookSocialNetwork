@@ -33,9 +33,6 @@ export class ManageBookComponent  implements OnInit{
   ngOnInit(): void {
     const bookId = this.activatedRoute.snapshot.params['id'];
 
-
-
-
         if (bookId) {
           this.bookService.findBookById({
             'book-id': bookId
@@ -48,6 +45,9 @@ export class ManageBookComponent  implements OnInit{
                 isbn: book.isbn as string,
                 synopsis: book.synopsis as string,
                 shareable: book.shareable,
+              }
+              if (book.cover) {
+                this.selectedPicture = book.cover;
               }
             }
           });
