@@ -44,11 +44,12 @@
                   placeholder="Feedback"></textarea>
       </div>
       <div class="d-flex justify-content-end gap-2 col-12">
+
         <button (click)="returnBook(true)" type="submit" class="btn btn-outline-primary"><i class="fas fa-save">&nbsp;Rate
           the book & Return</i></button>
         <button (click)="returnBook(false)" type="submit" class="btn btn-outline-success"><i
           class="fa-solid fa-paper-plane">&nbsp;Just Return</i></button>
-        <a (click)="selectedBook = undefined" class="btn btn-link text-danger"><i class="fas fa-times">&nbsp;Cancel</i></a>
+        <a (click)="selectedBook = null" class="btn btn-link text-danger"><i class="fas fa-times">&nbsp;Cancel</i></a>
       </div>
     </form>
   </div>

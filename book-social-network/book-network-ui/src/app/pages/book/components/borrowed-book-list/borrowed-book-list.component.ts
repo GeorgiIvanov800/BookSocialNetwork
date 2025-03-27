@@ -6,7 +6,8 @@ import {BookService} from '../../../../services/services/book.service';
 import {FeedbackRequest} from '../../../../services/models/feedback-request';
 import {FormsModule} from '@angular/forms';
 import {RatingComponent} from '../rating/rating.component';
-import {RouterLink} from '@angular/router';
+import {FeedbackService} from '../../../../services/services/feedback.service';
+
 
 @Component({
   selector: 'app-borrowed-book-list',
@@ -15,7 +16,6 @@ import {RouterLink} from '@angular/router';
     NgIf,
     FormsModule,
     RatingComponent,
-    RouterLink
   ],
   templateUrl: './borrowed-book-list.component.html',
   styleUrl: './borrowed-book-list.component.scss'
@@ -24,10 +24,10 @@ export class BorrowedBookListComponent  implements OnInit {
   page = 0;
   size = 5;
 
-  selectedBook: BorrowedBookResponse | undefined = undefined;
+  selectedBook: BorrowedBookResponse | null = null;
   feedBackRequest: FeedbackRequest = {bookId: 0, comment: '', note: 0};
 
-  constructor(private bookService: BookService) {
+  constructor(private bookService: BookService, private feedbackService: FeedbackService) {
   }
 
   ngOnInit(): void {
@@ -37,6 +37,7 @@ export class BorrowedBookListComponent  implements OnInit {
 
   returnBorrowedBook(book: BorrowedBookResponse) {
       this.selectedBook = book;
+      this.feedBackRequest.bookId = book.id as number;
   }
 
   private findAllBorrowedBooks() {
@@ -80,7 +81,33 @@ export class BorrowedBookListComponent  implements OnInit {
   }
 
   returnBook(withFeedback: boolean) {
+    console.log("Clicked")
+    if (!this.selectedBook) {
+      console.warn('No book selected!');
+      return;
+    }
 
+    this.bookService.returnBook({
+        'book-id': this.selectedBook.id as number
+      }).subscribe({
+      next: () => {
+       if (withFeedback) {
+         this.giveFeedback();
+       }
+       this.selectedBook = null;
+       this.findAllBorrowedBooks();
+      }
+    });
   }
+
+  private giveFeedback() {
+    this.feedbackService.saveFeedback({
+      body: this.feedBackRequest
+    })
+      .subscribe({
+        next: () => {}
+      })
+  }
+
 
 }
