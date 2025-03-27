@@ -3,12 +3,19 @@ import {NgForOf, NgIf} from '@angular/common';
 import {PageResponseBorrowedBookResponse} from '../../../../services/models/page-response-borrowed-book-response';
 import {BorrowedBookResponse} from '../../../../services/models/borrowed-book-response';
 import {BookService} from '../../../../services/services/book.service';
+import {FeedbackRequest} from '../../../../services/models/feedback-request';
+import {FormsModule} from '@angular/forms';
+import {RatingComponent} from '../rating/rating.component';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-borrowed-book-list',
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    FormsModule,
+    RatingComponent,
+    RouterLink
   ],
   templateUrl: './borrowed-book-list.component.html',
   styleUrl: './borrowed-book-list.component.scss'
@@ -16,8 +23,9 @@ import {BookService} from '../../../../services/services/book.service';
 export class BorrowedBookListComponent  implements OnInit {
   page = 0;
   size = 5;
-  selectedBook: BorrowedBookResponse = {};
 
+  selectedBook: BorrowedBookResponse | undefined = undefined;
+  feedBackRequest: FeedbackRequest = {bookId: 0, comment: '', note: 0};
 
   constructor(private bookService: BookService) {
   }
@@ -70,4 +78,9 @@ export class BorrowedBookListComponent  implements OnInit {
   get isLastPage(): boolean {
     return this.page == this.borrowedBooks.totalPages as number - 1;
   }
+
+  returnBook(withFeedback: boolean) {
+
+  }
+
 }

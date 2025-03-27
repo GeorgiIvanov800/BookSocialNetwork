@@ -18,7 +18,7 @@ export const routes: Routes = [
       {path: 'my-books', component: MyBookComponent},
       {path:'manage', component: ManageBookComponent},
       {path:'manage/:id', component: ManageBookComponent},
-      {path:'my-borrowed books', component: BorrowedBookListComponent}
+      {path:'my-borrowed-books', component: BorrowedBookListComponent}
     ]
   },
 
