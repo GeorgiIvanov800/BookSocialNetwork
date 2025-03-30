@@ -81,7 +81,7 @@ export class BorrowedBookListComponent  implements OnInit {
   }
 
   returnBook(withFeedback: boolean) {
-    console.log("Clicked")
+
     if (!this.selectedBook) {
       console.warn('No book selected!');
       return;
