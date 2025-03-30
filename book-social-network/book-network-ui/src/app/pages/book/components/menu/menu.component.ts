@@ -28,6 +28,7 @@ export class MenuComponent implements OnInit {
   }
 
   logout() {
-
+    localStorage.clear();
+    window.location.reload();
   }
 }
